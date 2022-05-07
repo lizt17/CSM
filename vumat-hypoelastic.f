@@ -1,8 +1,10 @@
-C Vumat - Hypoelastic material
+C -----------------------------------------------------------------
+C User Subroutine Vumat for ABAQUS - Hypoelastic material
 C Green - Naghdi rate
 C
-C
-C lizt21 - 2022-05-07 
+C By Lizt - School of Aerospace Engeerning, Tsinghua
+C 2022-05-07 
+C -----------------------------------------------------------------
 
       subroutine vumat(
 C Read only (unmodifiable)variables -
@@ -33,17 +35,41 @@ C
      2  enerInternNew(nblock), enerInelasNew(nblock)
 C
       character*80 cmname
+      real*8 E, nu, mu, lamda
+      dimension C(ndir+nshr,ndir+nshr)
 C
+      parameter(
+     1      zero = 0.0d0
+     1       one = 1.0d0
+     2       two = 2.0d0
+     3      half = 1.5d0  )
 
+C Inputs
+      E = props(1)      ! Young's modulus
+      nu = props(2)     ! Poisson's ratio
+
+C Lame's parameters
+      mu = E/two/(one + nu) 
+      lamda = mu*E/(one + mu)/(one - two*mu)
+
+C Calculate Jacobi Matrix of Material
+      C = zero
+      do i = 1,ndir
+            do j = 1,ndir
+                  C(i,j) = lamda
+            end do
+            C(i,i) = lamda + two*mu
+      end do
+      do i = 1,nshr
+            C(ndir+i,ndir+i) = two*mu
+      end do
+
+C Update Stress
       do 100 km = 1,nblock
-
-
-
-
-
-
-
-        user coding
+      
+            stressNew(km,:) = stressOld(km,:) 
+     *             + matmul(C,strainInc(km,:))
+      
   100 continue
 
       return
