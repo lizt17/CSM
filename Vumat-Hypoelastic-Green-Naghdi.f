@@ -42,7 +42,7 @@ C
      1      zero = 0.0d0
      1       one = 1.0d0
      2       two = 2.0d0
-     3      half = 1.5d0  )
+     3      half = 0.5d0  )
 
 C Inputs
       E = props(1)      ! Young's modulus
