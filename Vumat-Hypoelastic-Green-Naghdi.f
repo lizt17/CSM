@@ -18,7 +18,7 @@ C Write only (modifiable) variables -
      7  stressNew, stateNew, enerInternNew, enerInelasNew )
 C
       include 'vaba_param.inc'
-      implicit none
+      Implicit None
 C
       dimension props(nprops), density(nblock), coordMp(nblock,*),
      1  charLength(nblock), strainInc(nblock,ndir+nshr),
